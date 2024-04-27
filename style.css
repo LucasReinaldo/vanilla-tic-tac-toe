@@ -1,0 +1,153 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --cell-size: 100px;
+  --mark-size: calc(var(--cell-size) * 0.9);
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.board {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  grid-template-columns: repeat(3, auto);
+  grid-template-rows: repeat(3, auto);
+  justify-items: center;
+  align-items: center;
+}
+
+.cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2em;
+  background-color: #fff;
+  border: 1px solid #000;
+  cursor: pointer;
+  position: relative;
+}
+
+/* 
+  The following selectors are used to remove the border
+  between cells in the same row or column.
+
+  The first selector removes the right border of the
+  third cell in each row. By using the `3n` selector,
+  we can target the third cell in each row regardless of
+  the number of columns. 3n is equivalent to 3, 6, 9, ...
+
+  The second selector removes the bottom border of the
+  cells in the last row. By using the `n + 7` selector,
+  we can target the cells in the last row regardless of
+  the number of columns. n + 7 is equivalent to 7, 8, 9, ...
+
+  The third selector removes the left border of the
+  first cell in each row. By using the `3n + 1` selector,
+  we can target the first cell in each row regardless of
+  the number of columns. 3n + 1 is equivalent to 1, 4, 7, 10, ...
+
+  The fourth selector removes the top border of the
+  cells in the first row. By using the `-n + 3` selector,
+  we can target the cells in the first row regardless of
+  the number of columns. -n + 3 is equivalent to 1, 2, 3.
+*/
+
+.cell:nth-child(3n) {
+  border-right: none;
+}
+
+.cell:nth-child(n + 7) {
+  border-bottom: none;
+}
+
+.cell:nth-child(3n + 1) {
+  border-left: none;
+}
+
+.cell:nth-child(-n + 3) {
+  border-top: none;
+}
+
+/* 
+ */
+.cell.x::before,
+.cell.x::after {
+  background-color: #000;
+}
+
+.board.x .cell:not(.x):not(.o):hover::before,
+.board.x .cell:not(.x):not(.o):hover::after {
+  background-color: #f0f0f0;
+}
+
+.cell.x::before,
+.cell.x::after,
+.board.x .cell:not(.x):not(.o):hover::before,
+.board.x .cell:not(.x):not(.o):hover::after {
+  content: "";
+  position: absolute;
+  width: calc(var(--mark-size) * 0.15);
+  height: var(--mark-size);
+}
+
+.cell.x::before,
+.board.x .cell:not(.x):not(.o):hover::before {
+  transform: rotate(45deg);
+}
+
+.cell.x::after,
+.board.x .cell:not(.x):not(.o):hover::after {
+  transform: rotate(-45deg);
+}
+
+.cell.o::before {
+  background-color: #000;
+}
+
+.board.o .cell:not(.x):not(.o):hover::before {
+  background-color: #f0f0f0;
+}
+
+.cell.o::before,
+.cell.o::after,
+.board.o .cell:not(.x):not(.o):hover::before,
+.board.o .cell:not(.x):not(.o):hover::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+}
+
+.cell.o::before,
+.board.o .cell:not(.x):not(.o):hover::before {
+  width: var(--mark-size);
+  height: var(--mark-size);
+}
+
+.cell.o::after,
+.board.o .cell:not(.x):not(.o):hover::after {
+  width: calc(var(--mark-size) * 0.75);
+  height: calc(var(--mark-size) * 0.75);
+  background-color: #fff;
+}
+
+.cell.x:hover,
+.cell.o:hover {
+  cursor: not-allowed;
+}
+
+dialog.winning-dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
